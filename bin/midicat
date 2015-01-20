@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+
+require 'unimidi'
+require 'nibbler'
+
+devices = []
+threads = []
+data = []
+timestamps = []
+ni = Nibbler.new
+
+def format_mes(message)
+  if message.is_a? MIDIMessage::ControlChange
+    "Ch.#{message.channel}.#{message.index} -> #{message.value}"
+  elsif message.is_a? MIDIMessage::NoteOn
+    "Ch.#{message.channel}.#{message.name} ON @ #{message.velocity}"
+  elsif message.is_a? MIDIMessage::NoteOff
+    "Ch.#{message.channel}.#{message.name} OFF @ #{message.velocity}"
+  else
+    message
+    p message
+  end
+end
+
+UniMIDI::Input.all.each_with_index do |d, i|
+  p d
+  devices[i] = d.open
+  ii = 0
+  threads << Thread.new do
+    loop do
+      data[i] = d.gets
+      data[i].each do |dd|
+        timestamps[i] = sprintf "%8.4f", dd[:timestamp]
+        ms = ni.parse *dd[:data]
+        if ms.is_a? Array
+          ms.each do |mss|
+            print "#{timestamps[i]} #{d.name} #{format_mes mss}\n"
+          end
+        else
+          print "#{timestamps[i]} #{d.name} #{format_mes ms}\n"
+        end
+      end
+    end
+  end
+  threads.each do |t|
+    t.join
+  end
+end
+
