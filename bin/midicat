@@ -42,8 +42,9 @@ UniMIDI::Input.all.each_with_index do |d, i|
       end
     end
   end
-  threads.each do |t|
-    t.join
-  end
+end
+
+threads.each do |t|
+  t.join
 end
 
