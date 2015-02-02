@@ -3,6 +3,8 @@
 require 'unimidi'
 require 'nibbler'
 
+require 'midicat'
+
 devices = []
 threads = []
 data = []
@@ -16,35 +18,48 @@ def format_mes(message)
     "Ch.#{message.channel}.#{message.name} ON @ #{message.velocity}"
   elsif message.is_a? MIDIMessage::NoteOff
     "Ch.#{message.channel}.#{message.name} OFF @ #{message.velocity}"
+  elsif message.is_a? MIDIMessage::SystemExclusive::Message
+    "SysEx. #{message.data.to_s}"
   else
     message
-    p message
   end
 end
 
+puts <<_EOM_
+           /\\
+       )  ( ')     midicat #{Midicat::VERSION}
+      (  /  )      Ctrl-C to exit
+       \(__)|
+
+_EOM_
+
 UniMIDI::Input.all.each_with_index do |d, i|
-  p d
+  puts d.pretty_name
   devices[i] = d.open
   ii = 0
   threads << Thread.new do
     loop do
       data[i] = d.gets
       data[i].each do |dd|
-        timestamps[i] = sprintf "%8.4f", dd[:timestamp]
-        ms = ni.parse *dd[:data]
+        timestamps[i] = sprintf "%12.4f", dd[:timestamp]
+        ms = ni.parse(*dd[:data])
         if ms.is_a? Array
           ms.each do |mss|
-            print "#{timestamps[i]} #{d.name} #{format_mes mss}\n"
+            puts "#{timestamps[i]} #{d.name} #{format_mes mss}"
           end
         else
-          print "#{timestamps[i]} #{d.name} #{format_mes ms}\n"
+          puts "#{timestamps[i]} #{d.name} #{format_mes ms}"
         end
       end
     end
   end
 end
 
-threads.each do |t|
-  t.join
+if threads.size != 0
+  threads.each do |t|
+    t.join
+  end
+else
+  puts "no MIDI devices found."
+  puts "aborting"
 end
-
