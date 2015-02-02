@@ -20,6 +20,8 @@ $ midicat
 
 after installing it
 
+note: you should have gem executables directory in `$PATH` (`gem env gempath` shows the path to append your `$PATH`)
+
 ## Contributing
 
 1. Fork it ( https://github.com/polamjag/midicat/fork )
