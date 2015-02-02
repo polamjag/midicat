@@ -29,7 +29,7 @@ puts <<_EOM_
            /\\
        )  ( ')     midicat #{Midicat::VERSION}
       (  /  )      Ctrl-C to exit
-       \(__)|
+       \\(__)|
 
 _EOM_
 
