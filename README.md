@@ -1,4 +1,4 @@
-# Midicat
+# midicat
 
 cat/tailf for MIDI input events
 
