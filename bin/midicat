@@ -3,11 +3,12 @@
 require 'midicat'
 
 puts <<_EOM_
-           /\\
-       )  ( ')     midicat #{Midicat::VERSION}
-      (  /  )      Ctrl-C to exit
-       \\(__)|
+
+        /\\     ___
+    )  ( ')   |___|   midicat #{Midicat::VERSION}
+   (  /  )   _|  _|   Ctrl-C to exit
+    \\(__)|  (@) (@)
 
 _EOM_
 
-Midicat::Cli.new UniMIDI::Input.all
+Midicat::Cli.new

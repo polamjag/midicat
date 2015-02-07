@@ -1,21 +1,24 @@
 module Midicat
   class Cli
-    attr_reader :devices
+    attr_reader :device
 
-    def initialize(devices)
-      @threads = []
-      @devices = []
+    def initialize()
       @ni = Nibbler.new
 
-      devices.each_with_index do |d, i|
-        puts d.pretty_name
-        @devices[i] = d.open
-        @threads << Thread.new do
-          mainloop @devices[i]
-        end
+      if UniMIDI::Input.all.length > 0
+        @device = UniMIDI::Input.gets
+      else
+        puts "no MIDI device found!"
+        exit! 1
       end
 
-      @threads.each { |t| t.join } unless @threads.nil?
+      unless @device.nil?
+        begin
+          mainloop @device.open
+        ensure
+          @device.close
+        end
+      end
     end
 
     def mainloop(device)
@@ -30,7 +33,6 @@ module Midicat
           else
             puts "#{timestamp} #{device.name} #{Midicat::Formatter::format ms}"
           end
-
         end
       end
     end

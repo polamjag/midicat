@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    midicat (0.0.2)
+    midicat (0.0.4)
       midi-nibbler
       unimidi
 
