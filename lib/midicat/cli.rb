@@ -5,8 +5,11 @@ module Midicat
     def initialize()
       @ni = Nibbler.new
 
-      if UniMIDI::Input.all.length > 0
+      if UniMIDI::Input.all.length > 1
         @device = UniMIDI::Input.gets
+      elsif UniMIDI::Input.all.length == 1
+        @device = UniMIDI::Input.all[0]
+        puts @device.pretty_name
       else
         puts "no MIDI device found!"
         exit! 1
