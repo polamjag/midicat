@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/midicat.svg)](http://badge.fury.io/rb/midicat)
 
-cat/tailf for MIDI input events
+cat/tailf for MIDI input events, built upon UniMIDI
 
 ![demo screen](./demo.gif)
 
