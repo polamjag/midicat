@@ -1,5 +1,7 @@
 # midicat
 
+[![Gem Version](https://badge.fury.io/rb/midicat.svg)](http://badge.fury.io/rb/midicat)
+
 cat/tailf for MIDI input events
 
 ![demo screen](./demo.gif)
