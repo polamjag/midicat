@@ -21,17 +21,20 @@ module Midicat
       end
     end
 
-    def mainloop(device)
+    def mainloop
       loop do
-        device.gets.each do |data|
-          timestamp = sprintf "%12.4f", data[:timestamp]
-          ms = @ni.parse(*data[:data])
-          if ms.is_a? Array
-            ms.each do |mss|
-              puts "#{timestamp} #{device.name} #{Midicat::Formatter::format mss}"
+        @devices.each do |device|
+          device.gets.each do |data|
+            timestamp = sprintf "%12.4f", data[:timestamp]
+
+            ms = @ni.parse(*data[:data])
+            if ms.is_a? Array
+              ms.each do |mss|
+                puts "#{timestamp} #{device.name} #{Midicat::Formatter::format mss}"
+              end
+            else
+              puts "#{timestamp} #{device.name} #{Midicat::Formatter::format ms}"
             end
-          else
-            puts "#{timestamp} #{device.name} #{Midicat::Formatter::format ms}"
           end
         end
       end
