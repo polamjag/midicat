@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    midicat (0.1.0)
+    midicat (0.1.1)
       midi-nibbler
       unimidi
 
@@ -11,12 +11,12 @@ GEM
     alsa-rawmidi (0.3.1)
       ffi (~> 1.0)
     coderay (1.1.0)
-    ffi (1.9.6)
-    ffi-coremidi (0.3.7)
+    ffi (1.9.10)
+    ffi-coremidi (0.3.8)
       ffi (~> 1.9, >= 1.9.6)
     method_source (0.8.2)
     midi-jruby (0.1.5)
-    midi-message (0.4.5)
+    midi-message (0.4.9)
     midi-nibbler (0.2.3)
       midi-message (~> 0.4, >= 0.4.4)
     midi-winmm (0.1.10)
@@ -41,3 +41,6 @@ DEPENDENCIES
   midicat!
   pry
   rake (~> 10.0)
+
+BUNDLED WITH
+   1.10.6
