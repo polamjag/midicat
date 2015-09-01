@@ -1,8 +1,20 @@
+require 'optparse'
+require 'midicat/version'
+
 module Midicat
   class Cli
-    attr_reader :device
+    attr_reader :device, :options
 
-    def initialize()
+    def initialize args
+      @options = {
+        raw_mode: false
+      }
+
+      opt = OptionParser.new
+      opt.on('--raw', 'Enable raw mode (shows raw midi event)') { @options[:raw_mode] = true }
+      opt.version = Midicat::VERSION
+      opt.parse! args
+
       @ni = Nibbler.new
 
       if UniMIDI::Input.all.length > 1
@@ -27,18 +39,31 @@ module Midicat
     def mainloop(device)
       loop do
         device.gets.each do |data|
-          timestamp = sprintf "%12.4f", data[:timestamp]
-
-          ms = @ni.parse(*data[:data])
-          if ms.is_a? Array
-            ms.each do |mss|
-              puts "#{timestamp} #{device.name} #{Midicat::Formatter::format mss}"
-            end
-          else
-            puts "#{timestamp} #{device.name} #{Midicat::Formatter::format ms}"
-          end
+          show_message device.name, data
         end
       end
+    end
+
+    def show_message device_name, data
+      timestamp = sprintf "%12.4f", data[:timestamp]
+
+      if @options[:raw_mode]
+        puts "#{timestamp} #{device_name} #{data[:data]}"
+      else
+        messages = @ni.parse(*data[:data])
+
+        if messages.is_a? Array
+          messages.each do |message|
+            pretty_print timestamp, device_name, message
+          end
+        else
+          pretty_print timestamp, device_name, messages
+        end
+      end
+    end
+
+    def pretty_print timestamp, device_name, message
+      puts "#{timestamp} #{device_name} #{Midicat::Formatter::format message}"
     end
   end
 end

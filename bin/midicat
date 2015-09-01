@@ -2,13 +2,4 @@
 
 require 'midicat'
 
-puts <<_EOM_
-
-        /\\     ___
-    )  ( ')   |___|   midicat #{Midicat::VERSION}
-   (  /  )   _|  _|   Ctrl-C to exit
-    \\(__)|  (@) (@)
-
-_EOM_
-
-Midicat::Cli.new
+Midicat::Cli.new ARGV
